@@ -2,6 +2,8 @@
 
 # production
 _drafts
+_site
+.nojekyll
 
 # misc
 .DS_Store

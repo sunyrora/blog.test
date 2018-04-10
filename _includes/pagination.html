@@ -1,19 +1,35 @@
-{% if paginator.page_trail %}
+
+{% if paginator.total_pages > 1 %}
     <div class="pagination">
         {% if paginator.previous_page %}
             <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}"><i class="fas fa-angle-left"></i></a>
         {% endif %}
 
-        {% for trail in paginator.page_trail %}
-            <a 
-                class="{% if page.url == trail.path %}selected{% endif %}"
-                href="{{ trail.path | prepend: site.baseurl }}" title="{{ trail.title }}">
-                {{ trail.num }}
-            </a>
-    {% endfor %}
+        {% for page_num in (1..paginator.total_pages) %}
+					{% if page_num == 1 %}
+						{% assign path = site.baseurl | append: '/' | replace: '//', '/' %}
+					{% else %}
+						{% assign path = site.paginate_path | prepend: site.baseurl | replace: ":num", page_num %}
+					{% endif %}
+					<a 
+						class="{% if page_num == paginator.page %}selected{% endif %}"
+						href="{{ path }}" title="{{ page.title }}">
+						{{ page_num }}
+          </a>
 
-     {% if paginator.next_page %}
+            {% comment %} {% if page == paginator.page %}
+                <em>{{ page }}</em>
+
+            {% elsif page == 1 %} 
+                <a href="{{ '/Penguin/index.html' | prepend: site.baseurl }}">{{ page }}</a>
+            {% else %}
+                <a href="{{ site.paginate_path | prepend: '/Penguin/' | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}">{{ page }}</a>     
+                <!-- 페이지 번호를 나타내기 위한 코드. -->
+            {% endif %} {% endcomment %}
+        {% endfor %}
+
+        {% if paginator.next_page %}
             <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}"><i class="fas fa-angle-right"></i></a>
-    {% endif %}
+        {% endif %}
     </div>
 {% endif %}
